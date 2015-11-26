@@ -13,7 +13,7 @@ const char* fname = "map.dat";
 
 void saveToFile(int array[ROWS][COLUMNS])
 {
-    FILE *f = fopen("file.txt", "wb");
+    FILE *f = fopen(fname, "wb");
     if (f == NULL)
     {
         printf("Error opening file!\n");
@@ -41,7 +41,7 @@ void loadFromFile()
     row = malloc((1)*sizeof(int));
     array = malloc((1)*sizeof(int*));
 
-    FILE *f = fopen("file.txt", "rb");
+    FILE *f = fopen(fname, "rb");
     if (f == NULL)
     {
         printf("Error opening file!\n");
@@ -63,7 +63,6 @@ void loadFromFile()
         {
             break;
         }
-        printf("%d\n",x);
         if(x == -2)
         {
             break;
@@ -76,17 +75,14 @@ void loadFromFile()
             {
                 array[a] = realloc(array[a],(1)*sizeof(int*));
                 array[r][a] = row[a+1];
-                printf(" array[%d][%d] = %d\n",r,a,array[r][a]);
             }
             r++;
             array = realloc(array, (r+1) * sizeof(int*));
-            printf("i: %d\n",i-1);
             rows = i -1 ;
             i = 0;
         }
         row = realloc(row, (i+1) * sizeof(int));
         row[i] = x;
-        printf("num od sep: %d\n",num_of_sep);
         columns = num_of_sep;
     }
 
@@ -95,7 +91,7 @@ void loadFromFile()
     {
         for(d = 0; d< rows; d++)
         {
-            printf("Loaded a[%d][%d] = [%d]\n",c,d,array[c][d]);
+            printf("Loaded a[%d][%d] = %d\n",c,d,array[c][d]);
         }
     }
     fclose(f);
@@ -103,7 +99,7 @@ void loadFromFile()
 
 int main(int argc, char **argv)
 {
-    int array[3][2];
+    int array[ROWS][COLUMNS];
     array[0][0] = 2;
     array[1][0] = 7;
     array[0][1] = 8;
