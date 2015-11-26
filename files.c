@@ -6,7 +6,7 @@ save and load two dimensional vector of int to a file
 #include "stdio.h"
 #include <stdlib.h>
 
-#define ROWS 2
+#define ROWS 3
 #define COLUMNS 2
 
 const char* fname = "map.dat";
@@ -39,7 +39,7 @@ void loadFromFile()
     int* row;
     int **array;
     row = malloc((1)*sizeof(int));
-    array = malloc(sizeof(int*));
+    array = malloc((1)*sizeof(int*));
 
     FILE *f = fopen("file.txt", "rb");
     if (f == NULL)
@@ -51,6 +51,10 @@ void loadFromFile()
     int i = 0;
     int r = 0; //number of rows
 
+    int rows;
+    int columns;
+    int num_of_sep = 0;
+
     while(1)
     {
         fread(&x, sizeof(x), 1, f);
@@ -60,41 +64,52 @@ void loadFromFile()
             break;
         }
         printf("%d\n",x);
+        if(x == -2)
+        {
+            break;
+        }
         if(x == -1)
         {
+            num_of_sep++;
             int a;
-            for(a = 0; a < i; a++)
+            for(a = 0; a < i ; a++)
             {
-                array[a] = malloc(sizeof(int));
-                array[r][a] = row[a];
-                printf(" re %d\n",array[r][a]);
+                array[a] = realloc(array[a],(1)*sizeof(int*));
+                array[r][a] = row[a+1];
+                printf(" array[%d][%d] = %d\n",r,a,array[r][a]);
             }
             r++;
             array = realloc(array, (r+1) * sizeof(int*));
+            printf("i: %d\n",i-1);
+            rows = i -1 ;
             i = 0;
         }
         row = realloc(row, (i+1) * sizeof(int));
         row[i] = x;
+        printf("num od sep: %d\n",num_of_sep);
+        columns = num_of_sep;
     }
 
-
-    int k;
-    printf("*************\n");
-    for(k = 1; k < i; k++)
+    int c,d;
+    for(c = 0; c< columns; c++)
     {
-        printf("%d %d\n",k, row[k]);
+        for(d = 0; d< rows; d++)
+        {
+            printf("Loaded a[%d][%d] = [%d]\n",c,d,array[c][d]);
+        }
     }
-
     fclose(f);
 }
 
 int main(int argc, char **argv)
 {
-    int array[2][2];
+    int array[3][2];
     array[0][0] = 2;
     array[1][0] = 7;
     array[0][1] = 8;
     array[1][1] = 9;
+    array[2][0] = 10;
+    array[2][1] = 12;
     saveToFile(array);
     loadFromFile();
     return 0;
